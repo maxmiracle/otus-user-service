@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: otus-min-service
+management:
+  endpoints:
+    web:
+      base-path: /
+  server:
+    port: 8000
