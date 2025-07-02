@@ -7,15 +7,15 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@WebFluxTest(controllers = UserServiceController.class)
-public class UserServiceControllerTest {
+@WebFluxTest(controllers = TestServiceController.class)
+public class TestServiceControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @Test
     public void testGetPing() {
-        webTestClient.get().uri("/minservice/ping")
+        webTestClient.get().uri("/testservice/ping")
                 .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/minservice")
-public class UserServiceController {
+@RequestMapping("/testservice")
+public class TestServiceController {
     @GetMapping(path = "/ping",
             produces = "application/json")
     public Mono<String> getPing() {
