@@ -1,4 +1,4 @@
-package ru.maximserver.otus_min_service.controller;
+package ru.maximserver.otus_user_service.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +7,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-@WebFluxTest(controllers = MinServiceController.class)
-public class MinServiceControllerTest {
+@WebFluxTest(controllers = UserServiceController.class)
+public class UserServiceControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;

@@ -1,13 +1,13 @@
-package ru.maximserver.otus_min_service;
+package ru.maximserver.otus_user_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OtusMinServiceApplication {
+public class OtusUserServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OtusMinServiceApplication.class, args);
+		SpringApplication.run(OtusUserServiceApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-## otus-min-service
+## otus-user-service
 
 ### Команды
 

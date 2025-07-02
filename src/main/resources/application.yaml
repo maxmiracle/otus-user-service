@@ -1,6 +1,6 @@
 spring:
   application:
-    name: otus-min-service
+    name: otus-user-service
 management:
   endpoints:
     web:

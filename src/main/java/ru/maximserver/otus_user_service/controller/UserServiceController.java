@@ -1,4 +1,4 @@
-package ru.maximserver.otus_min_service.controller;
+package ru.maximserver.otus_user_service.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/minservice")
-public class MinServiceController {
+public class UserServiceController {
     @GetMapping(path = "/ping",
             produces = "application/json")
     public Mono<String> getPing() {
