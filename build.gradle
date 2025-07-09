@@ -1,39 +1,135 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.liquibase:liquibase-core:4.24.0"
+    }
+}
+
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.0'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.openapi.generator' version '7.14.0'
+    id 'org.liquibase.gradle' version '3.0.2'
+    id 'org.jooq.jooq-codegen-gradle' version '3.19.17'
 }
 
 group = 'ru.maximserver'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += ["$project.buildDir/generated/openapi/src/main/java"]
+        }
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.liquibase:liquibase-core'
+    liquibaseRuntime 'org.liquibase:liquibase-core'
+    liquibaseRuntime 'info.picocli:picocli:4.7.5'
+    liquibaseRuntime 'org.postgresql:postgresql'
+    implementation 'org.springframework:spring-jdbc'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:r2dbc-postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-api:2.8.9'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.14'
+    implementation 'org.openapitools:openapi-generator-gradle-plugin:7.14.0' exclude(group: 'org.slf4j', module: 'slf4j-simple')
+    implementation 'jakarta.validation:jakarta.validation-api'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:kafka'
+    jooqCodegen "org.jooq:jooq-meta-extensions-liquibase:3.19.17"
+    implementation "org.mapstruct:mapstruct:1.6.3"
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+compileJava.dependsOn "openApiGenerate"
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set("$rootDir/src/main/resources/specification/openapi-users.yaml")
+    outputDir.set("$project.buildDir/generated/openapi")
+    apiPackage.set("ru.maximserver.otus_user_service.api")
+    modelPackage.set("ru.maximserver.otus_user_service.model")
+    configOptions.set([library                             : "spring-boot",
+                       useOptional                         : "true",
+                       openApiNullable                     : "false",
+                       interfaceOnly                       : "true",
+                       generatedConstructorWithRequiredArgs: "false",
+                       useTags                             : "true",
+                       basePackage                         : "ru.maximserver.otus_user_service",
+                       useJakartaEe                        : "true",
+                       reactive                            : "true"])
+}
+
+compileJava.dependsOn "jooqCodegen"
+jooq {
+    configuration {
+        generator {
+            database {
+                name = "org.jooq.meta.extensions.liquibase.LiquibaseDatabase"
+                properties {
+                    property {
+                        key = "rootPath"
+                        value = "$rootDir/src/main/resources"
+                    }
+                    property {
+                        key = "scripts"
+                        value = "/db/changelog/db.changelog-master.yaml"
+                    }
+                    property {
+                        key = "includeLiquibaseTables"
+                        value = false
+                    }
+                    property {
+                        key = "database.liquibaseSchemaName"
+                        value = "public"
+                    }
+                    property {
+                        key = "changeLogParameters.contexts"
+                        value = "!test"
+                    }
+                }
+            }
+            target {
+                packageName = "ru.maximserver.otus_user_service.jooq.gen"
+            }
+        }
+    }
 }

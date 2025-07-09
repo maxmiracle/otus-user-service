@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id:  1
+      author:  maxim.vasilyev
+      labels: create-table
+      comment: create table user
+      changes:
+        - createTable:
+            tableName:  user
+            schemaName:  public
+            columns:
+              - column:
+                  name:  id
+                  type:  int
+                  autoIncrement:  true
+                  constraints:
+                    primaryKey:  true
+                    nullable:  false
+              - column:
+                  name:  username
+                  type:  varchar
+              - column:
+                  name:  firstName
+                  type:  varchar
+              - column:
+                  name:  lastName
+                  type:  varchar
+              - column:
+                  name:  email
+                  type:  varchar
+              - column:
+                  name:  phone
+                  type:  varchar
