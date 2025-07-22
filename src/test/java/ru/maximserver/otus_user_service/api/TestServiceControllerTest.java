@@ -1,4 +1,4 @@
-package ru.maximserver.otus_user_service.controller;
+package ru.maximserver.otus_user_service.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -53,6 +53,8 @@ dependencies {
     implementation 'org.springframework:spring-jdbc'
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
+    testImplementation 'org.postgresql:r2dbc-postgresql'
+    implementation 'org.postgresql:r2dbc-postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -64,8 +66,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.9'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-api:2.8.9'
-    implementation 'io.swagger.core.v3:swagger-annotations:2.2.14'
     implementation 'org.openapitools:openapi-generator-gradle-plugin:7.14.0' exclude(group: 'org.slf4j', module: 'slf4j-simple')
     implementation 'jakarta.validation:jakarta.validation-api'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
@@ -74,6 +76,7 @@ dependencies {
     testImplementation 'org.testcontainers:kafka'
     jooqCodegen "org.jooq:jooq-meta-extensions-liquibase:3.19.17"
     implementation "org.mapstruct:mapstruct:1.6.3"
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 }
 
 tasks.named('test') {
@@ -118,7 +121,7 @@ jooq {
                         value = false
                     }
                     property {
-                        key = "database.liquibaseSchemaName"
+                        key = "liquibaseSchemaName"
                         value = "public"
                     }
                     property {

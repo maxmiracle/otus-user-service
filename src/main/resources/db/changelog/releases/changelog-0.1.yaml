@@ -3,16 +3,16 @@ databaseChangeLog:
       id:  1
       author:  maxim.vasilyev
       labels: create-table
-      comment: create table user
+      comment: create table user_account
       changes:
         - createTable:
-            tableName:  user
+            tableName:  user_account
             schemaName:  public
             columns:
               - column:
                   name:  id
-                  type:  int
-                  autoIncrement:  true
+                  type:  bigserial
+                  autoIncrement: true
                   constraints:
                     primaryKey:  true
                     nullable:  false
@@ -20,10 +20,10 @@ databaseChangeLog:
                   name:  username
                   type:  varchar
               - column:
-                  name:  firstName
+                  name:  first_name
                   type:  varchar
               - column:
-                  name:  lastName
+                  name:  last_name
                   type:  varchar
               - column:
                   name:  email
@@ -31,3 +31,4 @@ databaseChangeLog:
               - column:
                   name:  phone
                   type:  varchar
+

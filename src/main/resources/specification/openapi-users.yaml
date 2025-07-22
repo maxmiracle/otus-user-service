@@ -119,19 +119,25 @@ components:
         id:
           type: integer
           format: int64
+          example: 123
         username:
           type: string
           maxLength: 256
+          example: johndoe589
         firstName:
           type: string
+          example: John
         lastName:
           type: string
+          example: Doe
         email:
           type: string
           format: email
+          example: bestjohn@doe.com
         phone:
           type: string
           format: phone
+          example: '+71002003040'
     Error:
       type: object
       required:
