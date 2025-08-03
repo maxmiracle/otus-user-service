@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "user-chart.fullname" . }}
+  labels:
+    {{- include "user-chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "user-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "user-chart.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "user-chart.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: USER_DB_USER
+              value: '{{ .Values.pgusername }}'
+            - name: USER_DB_PASSWORD
+              value: '{{ .Values.pgpassword }}'
+            - name: USER_DB_PORT
+              value: '{{ .Values.pgport }}'
+            - name: USER_DB_NAME
+              value: '{{ .Values.pgdatabase }}'
+            - name: USER_DB_SCHEMA
+              value: '{{ .Values.pgschema }}'
+            - name: USER_DB_HOST
+              value: '{{ .Release.Name }}-{{ .Values.pghost }}'
