@@ -1,5 +1,12 @@
 ## otus-user-service
 
+Все ресурсы сосредоточены в одном репозитории в учебных целях.
+
+charts в папке  /user-chart  
+Документ по helm - см.  /user-chart/README.md
+
+### java service
+стек: java-spring-netty-reactor-postgres-liquibase-jooq-openApiGenerator
 Параметры сервиса
 
 | ENV VARIABLE     | PURPOSE               |
@@ -11,12 +18,20 @@
 | USER_DB_NAME     | database name         |
 | USER_DB_SCHEMA   | schema (public)       |
 
+Сервис разворачивает структуру с помощью liquibase при запуске.
+
+Структуры api сервиса генерируются из OpenApi:  
+src/main/resources/specification/openapi-users.yaml
+
+### dev
+/dev/docker-compose.yaml - для отладки сервиса
+
 ### Команды
 
 #### Собрать приложение
 
 Требуется jdk 17  
-Приложение будет создано в папке build/libs
+Приложение будет создано в папке /build/libs
 ```shell
 ./gradlew bootJar
 ```
@@ -46,22 +61,26 @@ curl --location 'http://localhost:8080/testservice/ping'
 
 Сделать таг для публикации.
 ```shell
-docker tag otus-user-service maxmiracle/otus-user-service:2
+docker tag otus-user-service maxmiracle/otus-user-service:4
 ```
 
 Или пересобрать с новым тегом.
 ```shell
-docker build --platform linux/amd64 -t maxmiracle/otus-user-service:2 .
+docker build --platform linux/amd64 -t maxmiracle/otus-user-service:4 .
 ```
 
 Опубликовать
 ```shell
-docker push maxmiracle/otus-user-service:2
+docker push maxmiracle/otus-user-service:4
 ```
 
 Запустить из dockerhub
 ```shell
-docker run --name otus-user-service-01 -d -p 8888:8080 maxmiracle/otus-user-service:2
+docker run --name otus-user-service-01 -d -p 8888:8080 maxmiracle/otus-user-service:4
 ```
+
+### Postman collection
+https://www.postman.com/maxmiracle/otus-user-service-test/collection/088wihg/otus-user-service-test?action=share&creator=18992670
+![img.png](img.png)
 
 

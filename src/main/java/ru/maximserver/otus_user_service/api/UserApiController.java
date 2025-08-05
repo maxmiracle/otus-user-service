@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import ru.maximserver.otus_user_service.model.CreatedId;
+import ru.maximserver.otus_user_service.model.UpdateUser;
 import ru.maximserver.otus_user_service.model.User;
 import ru.maximserver.otus_user_service.service.UserService;
 
@@ -18,11 +20,11 @@ public class UserApiController implements UserApi {
     private final UserService userService;
 
     @Override
-    public Mono<ResponseEntity<Void>> createUser(
-            final Mono<User> user,
+    public Mono<ResponseEntity<CreatedId>> createUser(
+            final Mono<UpdateUser> user,
             final ServerWebExchange exchange) {
         return userService.createUser(user)
-                .thenReturn(new ResponseEntity<>(HttpStatus.CREATED));
+                .map(createdId -> ResponseEntity.status(HttpStatus.CREATED).body(createdId));
     }
 
     @Override
@@ -43,7 +45,7 @@ public class UserApiController implements UserApi {
     @Override
     public Mono<ResponseEntity<Void>> updateUser(
             final Long userId,
-            final Mono<User> user,
+            final Mono<UpdateUser> user,
             final ServerWebExchange exchange
     ){
         return userService.updateUser(userId, user)

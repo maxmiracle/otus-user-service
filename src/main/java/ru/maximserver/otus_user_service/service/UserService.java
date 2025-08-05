@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.maximserver.otus_user_service.exception.ResourceNotFoundException;
 import ru.maximserver.otus_user_service.mapper.UserMapper;
+import ru.maximserver.otus_user_service.model.CreatedId;
+import ru.maximserver.otus_user_service.model.UpdateUser;
 import ru.maximserver.otus_user_service.model.User;
 
 import static ru.maximserver.otus_user_service.jooq.gen.tables.UserAccount.USER_ACCOUNT;
@@ -20,12 +22,12 @@ public class UserService {
 
     private final DSLContext dslContext;
 
-    public Mono<Void> createUser(Mono<User> user) {
+    public Mono<CreatedId> createUser(Mono<UpdateUser> user) {
         return user.map(userMapper::toUserAccountRecord)
                 .flatMap(userAccountRecord ->
                         Mono.from(dslContext.insertInto(USER_ACCOUNT).set(userAccountRecord).returning()))
                 .doOnNext(savedResult -> log.info("Inserted Record:\n{}", savedResult))
-                .then();
+                .map(savedResult -> new CreatedId().id(savedResult.getValue(USER_ACCOUNT.ID)));
     }
 
     public Mono<Void> deleteUser(Long userId) {
@@ -45,7 +47,7 @@ public class UserService {
     }
 
 
-    public Mono<Void> updateUser(Long userId, Mono<User> user) {
+    public Mono<Void> updateUser(Long userId, Mono<UpdateUser> user) {
         return user.map(userMapper::toUserAccountRecord)
                 .flatMap(userAccountRecord -> Mono.from(dslContext.update(USER_ACCOUNT).set(userAccountRecord)
                         .where(USER_ACCOUNT.ID.eq(userId)).returning()))

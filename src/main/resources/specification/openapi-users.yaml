@@ -23,13 +23,17 @@ paths:
       description: This can only be done by the logged in user.
       operationId: createUser
       responses:
-        default:
-          description: successful operation
+        '201':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedId'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UpdateUser'
             examples:
               sample-user:
                 summary: Example
@@ -91,7 +95,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UpdateUser'
             examples:
               sample-user:
                 summary: Example
@@ -138,6 +142,34 @@ components:
           type: string
           format: phone
           example: '+71002003040'
+    UpdateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 256
+          example: johndoe589
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+          example: bestjohn@doe.com
+        phone:
+          type: string
+          format: phone
+          example: '+71002003040'
+    CreatedId:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 123
     Error:
       type: object
       required:
