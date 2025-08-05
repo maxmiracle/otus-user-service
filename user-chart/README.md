@@ -14,8 +14,21 @@ minikube start
 ```shell
 minikube addons enable ingress
 ```
+
+```shell
+minikube tunnel
+```
+
 ```shell
 minikube delete
+```
+
+```shell
+kubectl get po
+```
+
+```shell
+kubectl get services
 ```
 
 Проверка инсталяции хелма, миникуб должен быть запущен, чтобы сверить параметры

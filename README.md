@@ -46,22 +46,22 @@ curl --location 'http://localhost:8080/testservice/ping'
 
 Сделать таг для публикации.
 ```shell
-docker tag otus-user-service maxmiracle/otus-user-service:1
+docker tag otus-user-service maxmiracle/otus-user-service:2
 ```
 
 Или пересобрать с новым тегом.
 ```shell
-docker build --platform linux/amd64 -t maxmiracle/otus-user-service:1 .
+docker build --platform linux/amd64 -t maxmiracle/otus-user-service:2 .
 ```
 
 Опубликовать
 ```shell
-docker push maxmiracle/otus-user-service:1
+docker push maxmiracle/otus-user-service:2
 ```
 
 Запустить из dockerhub
 ```shell
-docker run --name otus-user-service-01 -d -p 8888:8080 maxmiracle/otus-user-service:1
+docker run --name otus-user-service-01 -d -p 8888:8080 maxmiracle/otus-user-service:2
 ```
 
 
