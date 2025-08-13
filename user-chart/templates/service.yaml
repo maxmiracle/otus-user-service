@@ -10,5 +10,6 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: 8080
       protocol: TCP
+      name: metrics
   selector:
     {{- include "user-chart.selectorLabels" . | nindent 4 }}

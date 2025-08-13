@@ -17,3 +17,15 @@ spring:
     user: ${USER_DB_USER}
     password: ${USER_DB_PASSWORD}
     url: jdbc:postgresql://${USER_DB_HOST}:${USER_DB_PORT}/${USER_DB_NAME}
+management:
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    distribution:
+      slo:
+        http.server.requests: 10ms, 50ms, 100ms, 200ms, 300ms, 400ms, 500ms, 600ms, 800ms
+  endpoints:
+    web:
+      exposure:
+        include: '*'

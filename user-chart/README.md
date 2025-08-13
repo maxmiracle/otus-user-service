@@ -12,7 +12,7 @@ helm install my-release . --dry-run --debug
 Установка сервиса в миникуб через helm
 
 ```shell
-helm install my-release . --debug
+helm install my-release .
 ```
 
 ```shell

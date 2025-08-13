@@ -37,7 +37,7 @@ services:
     stdin_open: true
 
   userservice:
-    image: maxmiracle/otus-user-service:4
+    image: maxmiracle/otus-user-service:6
     container_name: userservice
     environment:
       - USER_DB_HOST=postgres

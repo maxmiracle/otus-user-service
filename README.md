@@ -66,12 +66,12 @@ docker tag otus-user-service maxmiracle/otus-user-service:4
 
 Или пересобрать с новым тегом.
 ```shell
-docker build --platform linux/amd64 -t maxmiracle/otus-user-service:4 .
+docker build --platform linux/amd64 -t maxmiracle/otus-user-service:7 .
 ```
 
 Опубликовать
 ```shell
-docker push maxmiracle/otus-user-service:4
+docker push maxmiracle/otus-user-service:7
 ```
 
 Запустить из dockerhub
