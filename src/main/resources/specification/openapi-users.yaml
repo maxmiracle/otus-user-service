@@ -114,7 +114,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
+  /auth:
+    get:
+      tags:
+        - auth
+      summary: check auth
+      operationId: auth
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: authorized
+        '401':
+          description: unauthorized
+  /signin:
+    get:
+      tags:
+        - auth
+      summary: Get signin info
+      operationId: getSignin
+      responses:
+        '200':
+          description: info provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectBody'
+    post:
+      tags:
+        - auth
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: signin
+      responses:
+        '201':
+          description: Create user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedId'
+        '401':
+          description: Unauthorized
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+            examples:
+              sample-user:
+                summary: Example
+                value:
+                  username: user
+                  password: pass
+        description: Created user object
+        required: true
 components:
   schemas:
     User:
@@ -142,6 +195,9 @@ components:
           type: string
           format: phone
           example: '+71002003040'
+        password:
+          type: string
+          example: 1234
     UpdateUser:
       type: object
       properties:
@@ -163,6 +219,9 @@ components:
           type: string
           format: phone
           example: '+71002003040'
+        password:
+          type: string
+          example: 1234
     CreatedId:
       type: object
       properties:
@@ -181,7 +240,8 @@ components:
           format: int32
         message:
           type: string
-
+    ObjectBody:
+      type: object
   requestBodies:
     UserArray:
       content:
@@ -192,3 +252,7 @@ components:
               $ref: '#/components/schemas/User'
       description: List of user object
       required: true
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

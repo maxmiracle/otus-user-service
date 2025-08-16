@@ -3,7 +3,10 @@ package ru.maximserver.otus_user_service.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import ru.maximserver.otus_user_service.exception.ResourceNotFoundException;
 import ru.maximserver.otus_user_service.mapper.UserMapper;
@@ -59,5 +62,13 @@ public class UserService {
     private ResourceNotFoundException userNotFound(Long userId) {
         log.info("User {} not found", userId);
         return new ResourceNotFoundException("User not found");
+    }
+
+    public Mono<Boolean> authenticate(String username, String password) {
+        return Mono.from(dslContext.selectFrom(USER_ACCOUNT)
+                .where(USER_ACCOUNT.USERNAME.eq(username).and(USER_ACCOUNT.PASSWORD.eq(password))))
+                .doOnNext(result -> log.info("Found Record:\n{}", result))
+                .map(record -> true)
+                .switchIfEmpty(Mono.just(false));
     }
 }

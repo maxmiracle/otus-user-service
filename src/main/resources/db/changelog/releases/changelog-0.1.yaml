@@ -31,4 +31,7 @@ databaseChangeLog:
               - column:
                   name:  phone
                   type:  varchar
+              - column:
+                  name:  password
+                  type:  varchar
 
