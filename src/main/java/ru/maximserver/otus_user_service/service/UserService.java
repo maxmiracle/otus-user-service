@@ -1,5 +1,6 @@
 package ru.maximserver.otus_user_service.service;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
@@ -64,10 +65,11 @@ public class UserService {
         return new ResourceNotFoundException("User not found");
     }
 
-    public Mono<Boolean> authenticate(String username, String password) {
+    public Mono<Boolean> authenticate(String username, String password, @NotNull Long id) {
         return Mono.from(dslContext.selectFrom(USER_ACCOUNT)
                 .where(USER_ACCOUNT.USERNAME.eq(username).and(USER_ACCOUNT.PASSWORD.eq(password))))
-                .doOnNext(result -> log.info("Found Record:\n{}", result))
+                .doOnNext(result -> log.info("Found Record:\n{} - wanted id: {}", result, id))
+                .filter(record -> record.getId().equals(id))
                 .map(record -> true)
                 .switchIfEmpty(Mono.just(false));
     }

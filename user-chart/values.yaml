@@ -24,7 +24,7 @@ image:
   # Always - in case of an update, the image will be pulled again with same tag.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "7"
+  tag: "12"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -69,17 +69,27 @@ service:
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 80
 
+authService:
+  name: auth-service
+  labels:
+    app: auth-service
+  selectorLabels:
+    app: auth-service
+
 # This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   enabled: true
   className: ""
-  annotations: {}
+  annotations: {
+                 "nginx.ingress.kubernetes.io/auth-url": "http://auth-service.default.svc.cluster.local/auth-serv/auth?uri=$request_uri",
+                 "nginx.ingress.kubernetes.io/auth-signin": "http://arch.homework/auth-serv/signin",
+  }
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: arch.homework
       paths:
-        - path: /
+        - path: /api/v1
           pathType: Prefix
           backend:
             service:

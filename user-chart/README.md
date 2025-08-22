@@ -62,4 +62,15 @@ kubectl get services
 helm list
 ```
 
+curl --location 'http://10.96.244.234:80/auth-serv/auth' \
+--header 'Authorization: Basic bWF4OnBhc3M='
+
+```shell
+curl --location 'http://arch.homework:80/auth-serv/auth' \
+--header 'Authorization: Basic bWF4OnBhc3M='
+```
+
+
+my-release-postgresql
+
 

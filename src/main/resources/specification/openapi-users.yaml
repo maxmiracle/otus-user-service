@@ -122,6 +122,12 @@ paths:
       operationId: auth
       security:
         - basicAuth: []
+      parameters:
+        - in: query
+          name: uri
+          schema:
+            type: string
+          description: uri of original request
       responses:
         '200':
           description: authorized
